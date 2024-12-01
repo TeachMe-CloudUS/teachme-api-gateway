@@ -44,6 +44,7 @@ jobs:
       - name: Set up maven settings
         uses: s4u/maven-settings-action@v3.1.0
         with:
+          path: ${{ github.workspace }}/.m2/settings.xml
           servers: |
             [{
                 "id": "github",
@@ -63,7 +64,4 @@ jobs:
           labels: ${{ steps.meta.outputs.labels }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
-          build-args: |
-            MAVEN_SETTINGS_SECRET=maven_settings
-          secrets: |
-            id=maven_settings,src=$HOME/.m2/settings.xml
+          secret-files: maven_settings=${{ github.workspace }}/.m2/settings.xml
