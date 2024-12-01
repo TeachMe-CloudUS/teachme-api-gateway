@@ -52,6 +52,8 @@ jobs:
             }]
 
       - name: Build and push Docker image
+        env:
+          DOCKER_BUILDKIT: 1
         id: push
         uses: docker/build-push-action@v5
         with:
@@ -61,4 +63,7 @@ jobs:
           labels: ${{ steps.meta.outputs.labels }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
-          secrets: id=maven_settings,src=$HOME/.m2/settings.xml
+          build-args: |
+            MAVEN_SETTINGS_SECRET=maven_settings
+          secrets: |
+            id=maven_settings,src=$HOME/.m2/settings.xml
