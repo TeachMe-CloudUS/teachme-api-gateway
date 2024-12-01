@@ -6,7 +6,8 @@ COPY . .
 
 RUN chmod +x mvnw
 
-RUN ./mvnw clean package -DskipTests
+RUN --mount=type=secret,id=maven_settings,target=/root/.m2/settings.xml \
+    ./mvnw clean package -DskipTests
 
 RUN ls -l /app/target
 

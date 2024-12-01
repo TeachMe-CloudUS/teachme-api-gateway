@@ -14,3 +14,10 @@ spring:
             uri: ${STUDENT_SERVICE_URI}
             predicates:
               - Path=/api/students/**
+
+security:
+  jwt:
+    protected-paths:
+      - /api/**
+    white-listed-paths:
+      - /api/v1/auth/**

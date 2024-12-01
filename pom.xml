@@ -37,6 +37,12 @@
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
         </dependency>
+
+        <dependency>
+            <groupId>us.cloud.teachme</groupId>
+            <artifactId>teachme-auth-utils</artifactId>
+            <version>0.0.3-SNAPSHOT</version>
+        </dependency>
     </dependencies>
 
     <dependencyManagement>
@@ -68,6 +74,10 @@
             <snapshots>
                 <enabled>false</enabled>
             </snapshots>
+        </repository>
+        <repository>
+            <id>github</id>
+            <url>https://maven.pkg.github.com/TeachMe-CloudUS/teachme-auth-utils</url>
         </repository>
     </repositories>
 </project>
