@@ -20,6 +20,11 @@ spring:
             predicates:
               - Path=/api/v1/courses/**
 
+          - id: rating-service
+            uri: ${RATING_SERVICE_URI}
+            predicates:
+              - Path=/api/v1/ratings/**
+
           - id: student-service
             uri: ${STUDENT_SERVICE_URI}
             predicates:
