@@ -1,10 +1,12 @@
 package us.cloud.teachme.gateway.routes;
 
+import static org.springframework.cloud.gateway.server.mvc.filter.Bucket4jFilterFunctions.rateLimit;
 import static org.springframework.cloud.gateway.server.mvc.filter.CircuitBreakerFilterFunctions.circuitBreaker;
 import static org.springframework.cloud.gateway.server.mvc.handler.HandlerFunctions.http;
 import static org.springframework.web.servlet.function.RequestPredicates.path;
 
 import java.net.URI;
+import java.time.Duration;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.gateway.server.mvc.handler.GatewayRouterFunctions;
@@ -23,6 +25,9 @@ public class FrontendServiceRoute {
   RouterFunction<ServerResponse> frontendRoutes() {
     return GatewayRouterFunctions.route("frontend-service")
       .route(path("/**").and(path("/fallback").negate()), http(FRONTEND_SERVICE))
+      .filter(rateLimit(c -> c.setCapacity(100)
+        .setPeriod(Duration.ofMinutes(1))
+        .setKeyResolver(request -> request.remoteAddress().get().getAddress().getHostAddress())))
       .filter(circuitBreaker("auth-service", URI.create("forward:/fallback")))
       .build();
   }
