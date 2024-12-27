@@ -1,7 +1,10 @@
 package us.cloud.teachme.gateway.routes;
 
+import static org.springframework.cloud.gateway.server.mvc.filter.CircuitBreakerFilterFunctions.circuitBreaker;
 import static org.springframework.cloud.gateway.server.mvc.handler.HandlerFunctions.http;
 import static org.springframework.web.servlet.function.RequestPredicates.path;
+
+import java.net.URI;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.gateway.server.mvc.handler.GatewayRouterFunctions;
@@ -19,7 +22,8 @@ public class FrontendServiceRoute {
   @Bean
   RouterFunction<ServerResponse> frontendRoutes() {
     return GatewayRouterFunctions.route("frontend-service")
-      .route(path("/**"), http(FRONTEND_SERVICE))
+      .route(path("/**").and(path("/fallback").negate()), http(FRONTEND_SERVICE))
+      .filter(circuitBreaker("auth-service", URI.create("forward:/fallback")))
       .build();
   }
   
