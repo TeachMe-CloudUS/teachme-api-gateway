@@ -6,34 +6,13 @@ spring:
       factory: simple
       read-timeout: 5000
       connect-timeout: 5000
-  cloud:
-    gateway:
-      mvc:
-        routes:
-          - id: auth-service
-            uri: ${AUTH_SERVICE_URI}
-            predicates:
-              - Path=/api/v1/users/**,/api/v1/auth/**
 
-          - id: course-service
-            uri: ${COURSE_SERVICE_URI}
-            predicates:
-              - Path=/api/v1/courses/**
-
-          - id: rating-service
-            uri: ${RATING_SERVICE_URI}
-            predicates:
-              - Path=/api/v1/ratings/**
-
-          - id: student-service
-            uri: ${STUDENT_SERVICE_URI}
-            predicates:
-              - Path=/api/v1/students/**
-
-          - id: frontend
-            uri: ${FRONTEND_URI}
-            predicates:
-              - Path=/**
+services:
+  auth-service: ${AUTH_SERVICE_URI:http://localhost:8081}
+  student-service: ${STUDENT_SERVICE_URI:http://localhost:8082}
+  course-service: ${COURSE_SERVICE_URI:http://localhost:8083}
+  rating-service: ${RATING_SERVICE_URI:http://localhost:8084}
+  frontend-service: ${FRONTEND_URI:http://localhost:5173}
 
 security:
   jwt:
