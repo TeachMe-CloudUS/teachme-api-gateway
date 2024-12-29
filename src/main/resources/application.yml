@@ -12,6 +12,7 @@ services:
   student-service: ${STUDENT_SERVICE_URI:http://localhost:8082}
   course-service: ${COURSE_SERVICE_URI:http://localhost:8083}
   rating-service: ${RATING_SERVICE_URI:http://localhost:8084}
+  certification-service: ${CERTIFICATION_SERVICE_URI:http://localhost:8085}
   frontend-service: ${FRONTEND_URI:http://localhost:5173}
 
 security:

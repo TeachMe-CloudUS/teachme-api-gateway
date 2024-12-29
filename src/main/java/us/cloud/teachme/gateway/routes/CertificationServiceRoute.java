@@ -16,16 +16,16 @@ import org.springframework.web.servlet.function.RouterFunction;
 import org.springframework.web.servlet.function.ServerResponse;
 
 @Configuration(proxyBeanMethods = false)
-public class FrontendServiceRoute {
+public class CertificationServiceRoute {
 
-  @Value("${services.frontend-service}")
-  private String FRONTEND_SERVICE;
+  @Value("${services.certification-service}")
+  private String CERTIFICATION_SERVICE;
 
   @Bean
-  RouterFunction<ServerResponse> frontendRoutes() {
-    return GatewayRouterFunctions.route("frontend-service")
-      .route(path("/**").and(path("/fallback").negate()).and(path("/api/**").negate()), http(FRONTEND_SERVICE))
-      .filter(rateLimit(c -> c.setCapacity(1000)
+  RouterFunction<ServerResponse> certificationRoutes() {
+    return GatewayRouterFunctions.route("auth-service")
+      .route(path("/api/v1/certify/**").or(path("/api/v1/certificates/**")), http(CERTIFICATION_SERVICE))
+      .filter(rateLimit(c -> c.setCapacity(100)
         .setPeriod(Duration.ofMinutes(1))
         .setKeyResolver(request -> request.remoteAddress().get().getAddress().getHostAddress())))
       .filter(circuitBreaker("auth-service", URI.create("forward:/fallback")))
