@@ -24,7 +24,7 @@ public class FrontendServiceRoute {
   @Bean
   RouterFunction<ServerResponse> frontendRoutes() {
     return GatewayRouterFunctions.route("frontend-service")
-      .route(path("/**").and(path("/fallback").negate()), http(FRONTEND_SERVICE))
+      .route(path("/**").and(path("/fallback").negate()).and(path("/api/**").negate()), http(FRONTEND_SERVICE))
       .filter(rateLimit(c -> c.setCapacity(100)
         .setPeriod(Duration.ofMinutes(1))
         .setKeyResolver(request -> request.remoteAddress().get().getAddress().getHostAddress())))
