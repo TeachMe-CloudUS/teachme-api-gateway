@@ -3,7 +3,7 @@ spring:
     name: API Gateway
   http:
     client:
-      factory: simple
+      factory: jetty
       read-timeout: 5000
       connect-timeout: 5000
 
@@ -13,6 +13,7 @@ services:
   course-service: ${COURSE_SERVICE_URI:http://localhost:8083}
   rating-service: ${RATING_SERVICE_URI:http://localhost:8084}
   certification-service: ${CERTIFICATION_SERVICE_URI:http://localhost:8085}
+  notification-service: ${NOTIFICATION_SERVICE_URI:http://localhost:8085}
   forum-service: ${FORUM_SERVICE_URI:http://localhost:8086}
   frontend-service: ${FRONTEND_URI:http://localhost:5173}
 
