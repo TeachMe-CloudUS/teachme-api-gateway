@@ -3,7 +3,7 @@ spring:
     name: API Gateway
   http:
     client:
-      factory: jetty
+      factory: simple
       read-timeout: 5000
       connect-timeout: 5000
 
