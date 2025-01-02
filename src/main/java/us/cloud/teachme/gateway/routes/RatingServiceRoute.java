@@ -24,7 +24,7 @@ public class RatingServiceRoute {
   @Bean
   RouterFunction<ServerResponse> ratingRoutes() {
     return GatewayRouterFunctions.route("rating-service")
-      .route(path("/api/v1/ratings/**"), http(RATING_SERVICE))
+      .route(path("/api/v1/course/**"), http(RATING_SERVICE))
       .filter(rateLimit(c -> c.setCapacity(100)
         .setPeriod(Duration.ofMinutes(1))
         .setKeyResolver(request -> request.remoteAddress().get().getAddress().getHostAddress())))
