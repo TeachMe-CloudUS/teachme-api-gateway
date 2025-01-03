@@ -24,12 +24,19 @@ public class StudentServiceRoute {
   @Bean
   RouterFunction<ServerResponse> studentRoutes() {
     return GatewayRouterFunctions.route("student-service")
-      .route(path("/api/v1/students/**"), http(STUDENT_SERVICE))
-      .filter(rateLimit(c -> c.setCapacity(100)
-        .setPeriod(Duration.ofMinutes(1))
-        .setKeyResolver(request -> request.remoteAddress().get().getAddress().getHostAddress())))
-      .filter(circuitBreaker("auth-service", URI.create("forward:/fallback")))
-      .build();
+        .route(path("/api/v1/students/**"), http(STUDENT_SERVICE))
+        .filter(rateLimit(c -> c.setCapacity(100)
+            .setPeriod(Duration.ofMinutes(1))
+            .setKeyResolver(request -> request.remoteAddress().get().getAddress().getHostAddress())))
+        .filter(circuitBreaker("auth-service", URI.create("forward:/fallback")))
+        .build();
   }
-  
+
+  @Bean
+  RouterFunction<ServerResponse> studentSwaggerRoutes() {
+    return GatewayRouterFunctions.route("student-service-swagger")
+        .route(path("/swagger/student-service/**"), http(STUDENT_SERVICE))
+        .build();
+  }
+
 }

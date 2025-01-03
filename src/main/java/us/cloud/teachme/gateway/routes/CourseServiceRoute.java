@@ -24,12 +24,19 @@ public class CourseServiceRoute {
   @Bean
   RouterFunction<ServerResponse> courseRoutes() {
     return GatewayRouterFunctions.route("course-service")
-      .route(path("/api/v1/courses/**"), http(COURSE_SERVICE))
-      .filter(rateLimit(c -> c.setCapacity(100)
-        .setPeriod(Duration.ofMinutes(1))
-        .setKeyResolver(request -> request.remoteAddress().get().getAddress().getHostAddress())))
-      .filter(circuitBreaker("auth-service", URI.create("forward:/fallback")))
-      .build();
+        .route(path("/api/v1/courses/**"), http(COURSE_SERVICE))
+        .filter(rateLimit(c -> c.setCapacity(100)
+            .setPeriod(Duration.ofMinutes(1))
+            .setKeyResolver(request -> request.remoteAddress().get().getAddress().getHostAddress())))
+        .filter(circuitBreaker("auth-service", URI.create("forward:/fallback")))
+        .build();
   }
-  
+
+  @Bean
+  RouterFunction<ServerResponse> courseSwaggerRoutes() {
+    return GatewayRouterFunctions.route("course-service-swagger")
+        .route(path("/swagger/course-service/**"), http(COURSE_SERVICE))
+        .build();
+  }
+
 }

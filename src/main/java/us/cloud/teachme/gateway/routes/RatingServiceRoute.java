@@ -24,12 +24,19 @@ public class RatingServiceRoute {
   @Bean
   RouterFunction<ServerResponse> ratingRoutes() {
     return GatewayRouterFunctions.route("rating-service")
-      .route(path("/api/v1/course/**"), http(RATING_SERVICE))
-      .filter(rateLimit(c -> c.setCapacity(100)
-        .setPeriod(Duration.ofMinutes(1))
-        .setKeyResolver(request -> request.remoteAddress().get().getAddress().getHostAddress())))
-      .filter(circuitBreaker("auth-service", URI.create("forward:/fallback")))
-      .build();
+        .route(path("/api/v1/course/**"), http(RATING_SERVICE))
+        .filter(rateLimit(c -> c.setCapacity(100)
+            .setPeriod(Duration.ofMinutes(1))
+            .setKeyResolver(request -> request.remoteAddress().get().getAddress().getHostAddress())))
+        .filter(circuitBreaker("auth-service", URI.create("forward:/fallback")))
+        .build();
   }
-  
+
+  @Bean
+  RouterFunction<ServerResponse> ratingSwaggerRoutes() {
+    return GatewayRouterFunctions.route("rating-service-swagger")
+        .route(path("/swagger/rating-service/**"), http(RATING_SERVICE))
+        .build();
+  }
+
 }

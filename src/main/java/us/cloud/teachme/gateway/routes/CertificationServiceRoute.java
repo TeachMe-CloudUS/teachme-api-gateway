@@ -24,12 +24,19 @@ public class CertificationServiceRoute {
   @Bean
   RouterFunction<ServerResponse> certificationRoutes() {
     return GatewayRouterFunctions.route("auth-service")
-      .route(path("/api/v1/certify/**").or(path("/api/v1/certificates/**")), http(CERTIFICATION_SERVICE))
-      .filter(rateLimit(c -> c.setCapacity(100)
-        .setPeriod(Duration.ofMinutes(1))
-        .setKeyResolver(request -> request.remoteAddress().get().getAddress().getHostAddress())))
-      .filter(circuitBreaker("auth-service", URI.create("forward:/fallback")))
-      .build();
+        .route(path("/api/v1/certify/**").or(path("/api/v1/certificates/**")), http(CERTIFICATION_SERVICE))
+        .filter(rateLimit(c -> c.setCapacity(100)
+            .setPeriod(Duration.ofMinutes(1))
+            .setKeyResolver(request -> request.remoteAddress().get().getAddress().getHostAddress())))
+        .filter(circuitBreaker("auth-service", URI.create("forward:/fallback")))
+        .build();
   }
-  
+
+  @Bean
+  RouterFunction<ServerResponse> certificationSwaggerRoutes() {
+    return GatewayRouterFunctions.route("certification-service-swagger")
+        .route(path("/swagger/certification-service/**"), http(CERTIFICATION_SERVICE))
+        .build();
+  }
+
 }

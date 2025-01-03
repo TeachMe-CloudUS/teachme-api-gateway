@@ -32,4 +32,11 @@ public class ForumServiceRoute {
         .build();
   }
 
+  @Bean
+  RouterFunction<ServerResponse> forumSwaggerRoutes() {
+    return GatewayRouterFunctions.route("forum-service-swagger")
+        .route(path("/swagger/forum-service/**"), http(FORUM_SERVICE))
+        .build();
+  }
+
 }

@@ -24,12 +24,19 @@ public class AuthServiceRoute {
   @Bean
   RouterFunction<ServerResponse> authRoutes() {
     return GatewayRouterFunctions.route("auth-service")
-      .route(path("/api/v1/users/**").or(path("/api/v1/auth/**")), http(AUTH_SERVICE))
-      .filter(rateLimit(c -> c.setCapacity(100)
-        .setPeriod(Duration.ofMinutes(1))
-        .setKeyResolver(request -> request.remoteAddress().get().getAddress().getHostAddress())))
-      .filter(circuitBreaker("auth-service", URI.create("forward:/fallback")))
-      .build();
+        .route(path("/api/v1/users/**").or(path("/api/v1/auth/**")), http(AUTH_SERVICE))
+        .filter(rateLimit(c -> c.setCapacity(100)
+            .setPeriod(Duration.ofMinutes(1))
+            .setKeyResolver(request -> request.remoteAddress().get().getAddress().getHostAddress())))
+        .filter(circuitBreaker("auth-service", URI.create("forward:/fallback")))
+        .build();
   }
-  
+
+  @Bean
+  RouterFunction<ServerResponse> authSwaggerRoutes() {
+    return GatewayRouterFunctions.route("auth-service-swagger")
+        .route(path("/swagger/auth-service/**"), http(AUTH_SERVICE))
+        .build();
+  }
+
 }

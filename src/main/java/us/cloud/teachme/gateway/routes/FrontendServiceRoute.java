@@ -24,12 +24,16 @@ public class FrontendServiceRoute {
   @Bean
   RouterFunction<ServerResponse> frontendRoutes() {
     return GatewayRouterFunctions.route("frontend-service")
-      .route(path("/**").and(path("/fallback").negate()).and(path("/api/**").negate()), http(FRONTEND_SERVICE))
-      .filter(rateLimit(c -> c.setCapacity(1000)
-        .setPeriod(Duration.ofMinutes(1))
-        .setKeyResolver(request -> request.remoteAddress().get().getAddress().getHostAddress())))
-      .filter(circuitBreaker("auth-service", URI.create("forward:/fallback")))
-      .build();
+        .route(path("/**")
+            .and(path("/fallback").negate())
+            .and(path("/api/**").negate())
+            .and(path("/swagger/**").negate()),
+            http(FRONTEND_SERVICE))
+        .filter(rateLimit(c -> c.setCapacity(1000)
+            .setPeriod(Duration.ofMinutes(1))
+            .setKeyResolver(request -> request.remoteAddress().get().getAddress().getHostAddress())))
+        .filter(circuitBreaker("auth-service", URI.create("forward:/fallback")))
+        .build();
   }
-  
+
 }
